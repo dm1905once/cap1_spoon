@@ -35,7 +35,7 @@ SPOON_MEAL_TYPES=[
 
 @app.route('/')
 def home():
-    return("<h1>Welcome</h1>")
+    return render_template('home.html')
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -60,4 +60,4 @@ def list_recipes():
             return redirect('/')
 
 
-    return render_template('users/recipes.html', recipes=recipes)
+    return render_template('recipes.html', recipes=recipes)

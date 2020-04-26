@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block page_title %} 
+    Add a Pet Form
+{% endblock %}
+
+
+
+{% block main_content %}
+    <div class="container">
+
+        <div class="row mb-3">
+            <div class="col-sm-4">
+                <div class="card">
+                    {% if pet.photo_url %}
+                        <img  class="card-img-top" src="{{pet.photo_url}}">
+                    {% else %}
+                        <img  class="card-img-top" src="{{ url_for('static', filename='img/image_not_available.png') }}">
+                    {% endif %}
+                    
+                </div>
+            </div>
+            
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-header">{{pet.species}}</div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{pet.name}}</h4>
+                        <p class="card-text">{{pet.notes}}</p>
+                    </div>
+                    <div class="card-footer">{{pet.age}} years old</div>
+                </div>
+                <a href="/" class="btn btn-info btn-lg btn-block my-3">Back</a>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-4">
+                <form action="/{{pet.id}}" method="POST">
+                    {{ form.hidden_tag() }}
+                    {% include 'forms/edit_pet.html' %}
+                    <button class="btn btn-success btn-lg btn-block" type="submit">Update Pet Info</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

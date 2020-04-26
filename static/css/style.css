@@ -1,0 +1,29 @@
+
+.nav-img {
+    width: 80px;
+    border: 1px solid white;
+    border-radius: 5%;
+    margin: 5px;
+}
+
+.alert p {
+    line-height: 0.25;
+}
+
+.media img {
+    width: 120px;
+    height: 80px;
+}
+
+.card img {
+    height: 300px;
+}
+
+input {
+    width: 400px;
+}
+ 
+#available {
+    width: 20px;
+    height: 20px;
+}

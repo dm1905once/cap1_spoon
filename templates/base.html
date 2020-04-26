@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
+    <title>{% block page_title %}{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm  bg-success mb-3">
+        <div class="container">
+            <h1 class="display-4 text-light">Spoon</h1>
+            <a class="navbar-brand" href="/">
+                <img class="nav-img rounded-circle" src="{{ url_for('static', filename='img/spoon_logo1.png') }}">
+            </a>
+        </div>
+    </nav>
+
+        {% for msg in get_flashed_messages() %}
+        <div class="alert alert-success">
+            <p>{{ msg }}</p>
+        </div>
+        {% endfor %}
+
+
+        {% block main_content %} 
+        {% endblock %}
+
+        
+</body>
+</html>
