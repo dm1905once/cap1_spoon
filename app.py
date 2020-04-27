@@ -46,8 +46,8 @@ def home():
     # import pdb
     # pdb.set_trace()
 
-    # return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
-    return render_template('temp.html')
+    return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
+    # return render_template('temp.html')
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -79,3 +79,17 @@ def list_recipes():
             return render_template('recipes.html', recipes=recipes['results'])
         else:
             return redirect('/')
+
+
+@app.route('/recipes/<int:recipe_id>', methods=["GET"])
+def display_recipe_details(recipe_id):
+    """Display full details of the recipe."""
+
+    resp = requests.get(f"{SPOON_API_URL}/recipes/{recipe_id}/information", params={"apiKey":{SPOON_API_KEY}, "includeNutrition":"false"})
+
+    recipe = resp.json()
+
+    if resp.status_code == 200:
+        return render_template('recipe_details.html', recipe=recipe)
+    else:
+        return redirect('/')
