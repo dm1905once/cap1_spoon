@@ -11,11 +11,11 @@
         <div class="display-4">Welcome</div>
 
         <form action="/recipes" method="GET">
-            {{ form.hidden_tag() }}
+            {{ meal_type_form.hidden_tag() }}
 
             <div class="form-group">
-                {{ form.meal_type.label }}
-                {{form.meal_type(class_="form-control")}}
+                {{ meal_type_form.meal_type.label }}
+                {{meal_type_form.meal_type(class_="form-control")}}
               </div>
             <button class="btn btn-success btn-lg btn-block" type="submit">Display Recipes</button>
         </form>

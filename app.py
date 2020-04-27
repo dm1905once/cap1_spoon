@@ -35,7 +35,7 @@ SPOON_MEAL_TYPES=[
     ("drink", "Drink")
 ]
 
-@app.route('/, methods=["GET"]')
+@app.route('/', methods=["GET"])
 def home():
     meal_type_form = SearchByMealTypeForm()
     meal_type_form.meal_type.choices =  [(type[0], type[1]) for type in SPOON_MEAL_TYPES]
