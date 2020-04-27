@@ -46,7 +46,8 @@ def home():
     # import pdb
     # pdb.set_trace()
 
-    return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
+    # return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
+    return render_template('temp.html')
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():

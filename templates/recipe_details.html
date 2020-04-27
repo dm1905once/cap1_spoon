@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block page_title %} 
+    Recipes for you
+{% endblock %}
+
+
+
+{% block main_content %}
+    <div class="container">
+
+        <div class="row">
+            <div class="card w-50">
+                <img  class="card-img-top"src="{{recipe['image']}}" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">You should know ...</h4>
+                    <p class="card-text">{{recipe['summary']}}</a></p>
+                    <a class="btn btn-outline-primary btn-block" href="#">Save to Favorites</a>
+                </div>
+                <div class="card-footer text-muted text-left">
+                    Ready in {{recipe['readyInMinutes']}} minutes
+                </div>
+            </div>
+            <div class="card w-50">
+                <h3 class="card-header">{{recipe['title']}}</h3>
+                <div class="card-body">
+                    <h4 class="card-title">Ingredients:</h4>
+                    <ul class="list-group list-group-flush">
+                        {% for ingredient in recipe['extendedIngredients'] %}
+                            <li class="list-group-item">{{ingredient['name']}}</li>
+                        {% endfor %}
+                    </ul>
+                    <h5 class="card-title mt-3">Cuisine(s):</h5>
+                    <ul class="list-group list-group-horizontal">
+                        {% for cuisine in recipe['cuisines'] %}
+                            <li class="list-group-item">{{cuisine}}</li>
+                        {% endfor %}
+                    </ul>
+                    <h5 class="card-title mt-3">Wine Pairing(s):</h5>
+                    <ul class="list-group list-group-horizontal">
+                        {% for wine in recipe['winePairing'] %}
+                            <li class="list-group-item">{{wine['pairedWines']}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="card-footer text-muted text-left">
+                    Servings: {{recipe['servings']}}
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <h3>Instructions</h3>
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Step #</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for step in recipe['analyzedInstructions'][0]['steps'] %}
+                        <tr>
+                            <th scope="row">{{step['number']}}</th>
+                            <td>{{step['step']}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
