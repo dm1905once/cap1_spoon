@@ -1,46 +1,38 @@
 {% extends 'base.html' %}
 
 {% block page_title %} 
-    Add a Pet Form
+    Recipes for you
 {% endblock %}
 
 
 
 {% block main_content %}
     <div class="container">
-
-        <div class="row mb-3">
-            <div class="col-sm-4">
-                <div class="card">
-                    {% if pet.photo_url %}
-                        <img  class="card-img-top" src="{{pet.photo_url}}">
+        <div class="row">
+        {% for recipe in recipes %}
+            <div class="col-6 col-sm-4">
+                <div class="card my-3 data-id={{recipe['id']}}">
+                    {% if recipe['image'] %}
+                        <img class="card-img-top" src="{{recipe['image']}}">
                     {% else %}
-                        <img  class="card-img-top" src="{{ url_for('static', filename='img/image_not_available.png') }}">
+                        <img class="card-img-top" src="{{ url_for('static', filename='img/image_not_available.png') }}">
                     {% endif %}
-                    
-                </div>
-            </div>
-            
-            <div class="col-sm-4">
-                <div class="card">
-                    <div class="card-header">{{pet.species}}</div>
                     <div class="card-body">
-                        <h4 class="card-title">{{pet.name}}</h4>
-                        <p class="card-text">{{pet.notes}}</p>
+                    <lead class="card-subtitle">{{recipe['title']}}</lead>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a class="btn btn-sm btn-outline-success" href="/recipe/{{recipe['id']}}">See Recipe</a>
+                        <button class="btn btn-outline-light"><i class="text-secondary fas fa-heart"></i> </button>
                     </div>
-                    <div class="card-footer">{{pet.age}} years old</div>
+                    </div>
                 </div>
-                <a href="/" class="btn btn-info btn-lg btn-block my-3">Back</a>
             </div>
-
+        
+        {% endfor %}
         </div>
-        <div class="row mb-3">
+
+        <div class="row my-3">
             <div class="col-sm-4">
-                <form action="/{{pet.id}}" method="POST">
-                    {{ form.hidden_tag() }}
-                    {% include 'forms/edit_pet.html' %}
-                    <button class="btn btn-success btn-lg btn-block" type="submit">Update Pet Info</button>
-                </form>
+                <a class="btn btn-secondary btn-lg btn-block" href="#" role="button">Nada</a>
             </div>
         </div>
 

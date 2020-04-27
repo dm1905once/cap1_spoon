@@ -3,6 +3,7 @@
 from flask import Flask, render_template, request, redirect
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
 from private import SPOON_API_KEY
+from recipe import Recipe
 import requests
 
 app = Flask(__name__)
@@ -35,7 +36,7 @@ SPOON_MEAL_TYPES=[
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('temp.html')
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -52,7 +53,11 @@ def list_recipes():
     if "type" in args:
         meal_type=args.get("type")
 
-        # resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
+        resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
+        # import pdb
+        # pdb.set_trace()
+        # print("Cool")
+
         recipes = resp.json()
 
         if resp.status_code != 200:
@@ -60,4 +65,4 @@ def list_recipes():
             return redirect('/')
 
 
-    return render_template('recipes.html', recipes=recipes)
+    return render_template('recipes.html', recipes=recipes['results'])

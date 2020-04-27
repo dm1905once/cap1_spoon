@@ -1,3 +1,7 @@
+html {
+    font-size: 14px;
+    font-family: 'Noto Sans', 'Baloo Thambi 2', 'Baloo Da 2', Helvetica, sans-serif;
+  }
 
 .nav-img {
     width: 80px;
@@ -5,25 +9,38 @@
     border-radius: 5%;
     margin: 5px;
 }
-
-.alert p {
-    line-height: 0.25;
+/*
+.card {
+    max-width: 18rem;
 }
 
-.media img {
-    width: 120px;
-    height: 80px;
-}
 
 .card img {
-    height: 300px;
+     width: 300px;  
 }
 
-input {
-    width: 400px;
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 2;
+    }
 }
- 
-#available {
-    width: 20px;
-    height: 20px;
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 3;
+    }
 }
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 4;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 5;
+    }
+}
+*/
