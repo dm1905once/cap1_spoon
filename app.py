@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, redirect
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
-from forms import SearchByMealTypeForm
+from forms import SearchByMealTypeForm, SearchByIngredientsForm
 from private import SPOON_API_KEY
 from recipe import Recipe
 import requests
@@ -39,7 +39,14 @@ SPOON_MEAL_TYPES=[
 def home():
     meal_type_form = SearchByMealTypeForm()
     meal_type_form.meal_type.choices =  [(type[0], type[1]) for type in SPOON_MEAL_TYPES]
-    return render_template('home.html', meal_type_form=meal_type_form)
+
+    ingredients_form = SearchByIngredientsForm()
+    ingredients_list = IngredientList.query.all()
+    ingredients_form.ingredients.choices = [(ingredient.name, ingredient.name) for ingredient in ingredients_list]
+    # import pdb
+    # pdb.set_trace()
+
+    return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -47,25 +54,27 @@ def list_recipes():
 
     args = request.args
 
-    # Call __  API to search by list of ingredients
+    # Call findByIngredients  API to search by list of ingredients
     if "ingredients" in args:
-        # Call ingredients API
-        print("nada")
+        selected_ingredients='+'.join(args.getlist("ingredients"))
+        resp = requests.get(f"{SPOON_API_URL}/recipes/findByIngredients", params={"apiKey":{SPOON_API_KEY}, "ingredients":selected_ingredients, "ignorePantry":"true", "ranking":1, "number":12})
+
+        recipes = resp.json()
+
+        if resp.status_code == 200:
+            return render_template('recipes.html', recipes=recipes)
+        else:
+            return redirect('/')
 
     # Call complexSearch API to search by mealtype
     if "meal_type" in args:
         meal_type=args.get("meal_type")
 
         resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
-        # import pdb
-        # pdb.set_trace()
-        # print("Cool")
 
         recipes = resp.json()
 
-        if resp.status_code != 200:
-            print("NOT cool")
+        if resp.status_code == 200:
+            return render_template('recipes.html', recipes=recipes['results'])
+        else:
             return redirect('/')
-
-
-    return render_template('recipes.html', recipes=recipes['results'])

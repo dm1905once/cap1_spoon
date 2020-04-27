@@ -17,7 +17,18 @@
                 {{ meal_type_form.meal_type.label }}
                 {{meal_type_form.meal_type(class_="form-control")}}
               </div>
-            <button class="btn btn-success btn-lg btn-block" type="submit">Display Recipes</button>
+            <button class="btn btn-success btn-lg btn-block" type="submit">Display Recipes by Meal Type</button>
         </form>
+
+        <form action="/recipes" method="GET">
+            {{ ingredients_form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ ingredients_form.ingredients.label }}
+                {{ingredients_form.ingredients(class_="form-control")}}
+              </div>
+            <button class="btn btn-warning btn-lg btn-block" type="submit">Display Recipes by Ingredients</button>
+        </form>
+
     </div>
 {% endblock %}
