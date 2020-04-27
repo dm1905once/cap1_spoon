@@ -16,9 +16,31 @@
                     <h4 class="card-title">You should know ...</h4>
                     <p class="card-text">{{recipe['summary']}}</a></p>
                     <a class="btn btn-outline-primary btn-block" href="#">Save to Favorites</a>
+                    <table class="table table-sm">
+                        <tbody>
+                                <tr>
+                                    <td>Ready in: </td>
+                                    <td>{{recipe['readyInMinutes']}} minutes</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Health Score (%):</td>
+                                    <td>{{recipe['healthScore']}}</td>
+                                    <td>
+                                    {% if recipe['healthScore'] >= 90 %}
+                                        <span class="badge badge-success">Healthy!</span>
+                                    {% elif (recipe['healthScore'] >= 60) and (recipe['healthScore'] < 90) %}
+                                        <span class="badge badge-warning">Okay</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Danger</span>
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="card-footer text-muted text-left">
-                    Ready in {{recipe['readyInMinutes']}} minutes
+                    Servings: {{recipe['servings']}}
                 </div>
             </div>
             <div class="card w-50">
@@ -30,21 +52,39 @@
                             <li class="list-group-item">{{ingredient['name']}}</li>
                         {% endfor %}
                     </ul>
-                    <h5 class="card-title mt-3">Cuisine(s):</h5>
-                    <ul class="list-group list-group-horizontal">
-                        {% for cuisine in recipe['cuisines'] %}
-                            <li class="list-group-item">{{cuisine}}</li>
-                        {% endfor %}
-                    </ul>
-                    <h5 class="card-title mt-3">Wine Pairing(s):</h5>
-                    <ul class="list-group list-group-horizontal">
-                        {% for wine in recipe['winePairing'] %}
-                            <li class="list-group-item">{{wine['pairedWines']}}</li>
-                        {% endfor %}
-                    </ul>
+
+                    <!-- Dish Type -->
+                    {% if recipe['dishTypes']|length > 0 %}
+                        <h5 class="card-title mt-3">Meal Type(s):</h5>
+                        <ul class="list-group list-group-horizontal">
+                            {% for type in recipe['dishTypes'] %}
+                                <li class="list-group-item">{{type}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <!-- Cuisines -->
+                    {% if recipe['cuisines']|length > 0 %}
+                        <h5 class="card-title mt-3">Cuisine(s):</h5>
+                        <ul class="list-group list-group-horizontal">
+                            {% for cuisine in recipe['cuisines'] %}
+                                <li class="list-group-item">{{cuisine}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <!-- Wines -->
+                    {% if recipe['winePairing']['pairedWines']|length > 0 %}
+                        <h5 class="card-title mt-3">Wine Pairing(s):</h5>
+                        <ul class="list-group list-group-horizontal">
+                            {% for wine in recipe['winePairing']['pairedWines'] %}
+                                <li class="list-group-item">{{wine}}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
                 <div class="card-footer text-muted text-left">
-                    Servings: {{recipe['servings']}}
+                    Source: {{recipe['creditsText']}}
                 </div>
             </div>
         </div>
