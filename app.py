@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template, request, redirect
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
+from forms import SearchByMealTypeForm
 from private import SPOON_API_KEY
 from recipe import Recipe
 import requests
@@ -34,9 +35,11 @@ SPOON_MEAL_TYPES=[
     ("drink", "Drink")
 ]
 
-@app.route('/')
+@app.route('/, methods=["GET"]')
 def home():
-    return render_template('temp.html')
+    meal_type_form = SearchByMealTypeForm()
+    meal_type_form.meal_type.choices =  [(type[0], type[1]) for type in SPOON_MEAL_TYPES]
+    return render_template('home.html', meal_type_form=meal_type_form)
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -50,8 +53,8 @@ def list_recipes():
         print("nada")
 
     # Call complexSearch API to search by mealtype
-    if "type" in args:
-        meal_type=args.get("type")
+    if "meal_type" in args:
+        meal_type=args.get("meal_type")
 
         resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
         # import pdb
