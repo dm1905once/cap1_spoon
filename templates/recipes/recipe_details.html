@@ -90,8 +90,8 @@
         </div>
 
         <div class="row mt-3">
-            <h3>Instructions</h3>
             {% if recipe['analyzedInstructions'] %}
+            <h3>Instructions</h3>
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
@@ -109,7 +109,7 @@
                     </tbody>
                 </table>
             {% else %}
-                <mark> <i class="fas fa-exclamation-circle"></i> No instructions available for this recipe</mark>
+                <div class="alert alert-warning"> <i class="fas fa-exclamation-circle"></i> No instructions available for this recipe</div>
             {% endif %}
         </div>
 
