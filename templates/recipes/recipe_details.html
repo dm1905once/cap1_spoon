@@ -91,22 +91,26 @@
 
         <div class="row mt-3">
             <h3>Instructions</h3>
-            <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th>Step #</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for step in recipe['analyzedInstructions'][0]['steps'] %}
+            {% if recipe['analyzedInstructions'] %}
+                <table class="table table-sm table-hover">
+                    <thead>
                         <tr>
-                            <th scope="row">{{step['number']}}</th>
-                            <td>{{step['step']}}</td>
+                            <th>Step #</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for step in recipe['analyzedInstructions'][0]['steps'] %}
+                            <tr>
+                                <th scope="row">{{step['number']}}</th>
+                                <td>{{step['step']}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <mark> <i class="fas fa-exclamation-circle"></i> No instructions available for this recipe</mark>
+            {% endif %}
         </div>
 
     </div>
