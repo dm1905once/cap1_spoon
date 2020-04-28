@@ -63,7 +63,7 @@ def list_recipes():
         recipes = resp.json()
 
         if resp.status_code == 200:
-            return render_template('recipes.html', recipes=recipes)
+            return render_template('recipes/recipes.html', recipes=recipes)
         else:
             return redirect('/')
 
@@ -76,7 +76,7 @@ def list_recipes():
         recipes = resp.json()
 
         if resp.status_code == 200:
-            return render_template('recipes.html', recipes=recipes['results'])
+            return render_template('recipes/recipes.html', recipes=recipes['results'])
         else:
             return redirect('/')
 
@@ -90,6 +90,6 @@ def display_recipe_details(recipe_id):
     recipe = resp.json()
 
     if resp.status_code == 200:
-        return render_template('recipe_details.html', recipe=recipe)
+        return render_template('recipes/recipe_details.html', recipe=recipe)
     else:
         return redirect('/')
