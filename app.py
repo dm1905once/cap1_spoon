@@ -1,11 +1,12 @@
 """Spoon application."""
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, flash
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
-from forms import SearchByMealTypeForm, SearchByIngredientsForm
+from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm
 from private import SPOON_API_KEY
 from recipe import Recipe
 import requests
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 # from flask_debugtoolbar import DebugToolbarExtension
@@ -35,6 +36,26 @@ SPOON_MEAL_TYPES=[
     ("drink", "Drink")
 ]
 
+### User / Session functions
+
+CURR_USER_KEY = "current_user"
+
+def do_login(user):
+    """Log in user."""
+    session[CURR_USER_KEY] = user.id
+
+
+def do_logout():
+    """Logout user."""
+    if CURR_USER_KEY in session:
+        del session[CURR_USER_KEY]
+
+
+
+
+
+#### Routes ####
+
 @app.route('/', methods=["GET"])
 def home():
     meal_type_form = SearchByMealTypeForm()
@@ -43,11 +64,41 @@ def home():
     ingredients_form = SearchByIngredientsForm()
     ingredients_list = IngredientList.query.all()
     ingredients_form.ingredients.choices = [(ingredient.name, ingredient.name) for ingredient in ingredients_list]
-    # import pdb
-    # pdb.set_trace()
 
     return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
     # return render_template('temp.html')
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+    """Register a new user"""
+
+    form = UserRegisterForm()
+
+    if form.validate_on_submit():
+        try:
+            new_user = User.register(
+                email=form.email.data,
+                password=form.password.data,
+                first_name=form.first_name.data,
+                last_name=form.last_name.data
+            )
+            db.session.add(new_user)
+            db.session.commit()
+
+        except IntegrityError:
+            flash("Email is already registered", 'danger')
+            return render_template('users/register.html', form=form)
+
+        do_login(new_user)
+
+        return redirect("/")
+
+    else:
+        return render_template('users/register.html', form=form)
+
+
+
 
 @app.route('/recipes', methods=["GET"])
 def list_recipes():
@@ -79,6 +130,8 @@ def list_recipes():
             return render_template('recipes/recipes.html', recipes=recipes['results'])
         else:
             return redirect('/')
+
+
 
 
 @app.route('/recipes/<int:recipe_id>', methods=["GET"])

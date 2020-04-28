@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block page_title %} 
+    Welcome to Feedback
+{% endblock %}
+
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <div class="h4 p-2 mb-2 border border-primary rounded text-center">Login</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                <div class="lead text-center">Or <a href="/register">Register</a> a new account</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend"><span class="input-group-text">Username</span></div>
+                            {{form.username(class_="form-control")}}
+                        </div>
+                        {% for error in form.username.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
+                        <div class="input-group mt-3">
+                            <div class="input-group-prepend"><span class="input-group-text">Password</span></div>
+                            {{form.password(class_="form-control")}}
+                        </div>
+                        {% for error in form.password.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
+                        <button class="mt-3 btn btn-primary btn-block">Submit</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
