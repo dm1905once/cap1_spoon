@@ -14,6 +14,11 @@ class UserRegisterForm(FlaskForm):
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name')
 
+class UserLoginForm(FlaskForm):
+    """Form to authenticate existing users."""
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[Length(min=6)])
+    
 
 ### Recipe search forms
 class SearchByMealTypeForm(FlaskForm):

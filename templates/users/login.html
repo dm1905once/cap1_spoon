@@ -22,10 +22,10 @@
                     <form method="POST">
                         {{ form.hidden_tag() }}
                         <div class="input-group mt-3">
-                            <div class="input-group-prepend"><span class="input-group-text">Username</span></div>
-                            {{form.username(class_="form-control")}}
+                            <div class="input-group-prepend"><span class="input-group-text">Email</span></div>
+                            {{form.email(class_="form-control")}}
                         </div>
-                        {% for error in form.username.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
+                        {% for error in form.email.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
                         <div class="input-group mt-3">
                             <div class="input-group-prepend"><span class="input-group-text">Password</span></div>
                             {{form.password(class_="form-control")}}

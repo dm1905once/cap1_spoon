@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, redirect, session, flash
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
-from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm
+from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
 from recipe import Recipe
 import requests
@@ -96,6 +96,36 @@ def register():
 
     else:
         return render_template('users/register.html', form=form)
+
+
+@app.route('/login', methods=["GET", "POST"])
+def login():
+    """Handle user login."""
+
+    form = UserLoginForm()
+
+    if form.validate_on_submit():
+        user = User.authenticate(form.email.data,
+                                 form.password.data)
+
+        if user:
+            do_login(user)
+            flash(f"Hello, {user.first_name}!", "success")
+            return redirect("/")
+        else:
+            flash("Invalid credentials.", 'danger')
+
+    return render_template('users/login.html', form=form)
+
+
+
+@app.route('/logout')
+def logout():
+    """Handle logout of user."""
+
+    do_logout()
+    flash("User logged out", "info")
+    return redirect('/')
 
 
 
