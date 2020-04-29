@@ -3,10 +3,10 @@ html {
     font-family: 'Noto Sans', 'Baloo Thambi 2', 'Baloo Da 2', Helvetica, sans-serif;
   }
 
-.nav-img {
-    width: 80px;
-    border: 1px solid white;
-    border-radius: 5%;
+#nav-img {
+    width: 60px;
+    /* border: 1px solid #808B96;
+    border-radius: 5%; */
     margin: 5px;
 }
 /*

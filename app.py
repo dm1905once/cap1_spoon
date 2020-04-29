@@ -1,6 +1,6 @@
 """Spoon application."""
 
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, g
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
@@ -39,6 +39,16 @@ SPOON_MEAL_TYPES=[
 ### User / Session functions
 
 CURR_USER_KEY = "current_user"
+
+@app.before_request
+def add_user_to_g():
+    """If logged in, add current user to Flask global."""
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
 
 def do_login(user):
     """Log in user."""

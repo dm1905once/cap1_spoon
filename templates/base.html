@@ -12,15 +12,26 @@
 <body>
     <nav class="navbar navbar-expand-sm  bg-success mb-3">
         <div class="container">
-            <h1 class="display-4 text-light">Spoon</h1>
-            <ul>
-                <li><a href="/register">Register</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/logout">Log out</a></li>
+            <div class="display-4">Spoon</div>
+
+            <ul class="navbar-nav">
+                {% if not g.user %}
+                    <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="#">Favorites</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Cooklists</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout">Log out</a></li>
+                {% endif %}
             </ul>
-            <a class="navbar-brand" href="/">
-                <img class="nav-img rounded-circle" src="{{ url_for('static', filename='img/spoon_logo1.png') }}">
-            </a>
+            <!-- <a class="navbar-brand" href="/">
+                <img id="nav-img" class="nav-img rounded-circle" src="{{ url_for('static', filename='img/spoon_logo1.png') }}">
+            </a> -->
+            {% if not g.user %}
+                Guest
+            {% else %}
+                {{g.user.first_name}}
+            {% endif %}
         </div>
     </nav>
 
