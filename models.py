@@ -79,7 +79,7 @@ class User(db.Model):
     first_name = db.Column(db.String(30), nullable=False)
     last_name  = db.Column(db.String(30), nullable=True)
     ## Relationships ##
-    
+    preferences = db.relationship('UserPreference', uselist=False)
     
 
 
@@ -88,10 +88,10 @@ class User(db.Model):
     full_name = property(get_full_name)
 
     @classmethod
-    def register(cls, email, password, first_name, last_name):
+    def register(cls, email, password, first_name, last_name, measure_system):
             hashed = bcrypt.generate_password_hash(password)
             hashed_utf8 = hashed.decode('utf8')
-            return cls(email=email, password=hashed_utf8, first_name=first_name, last_name=last_name)
+            return cls(email=email, password=hashed_utf8, first_name=first_name, last_name=last_name, preferences=UserPreference(measure_system=measure_system))
 
     @classmethod
     def authenticate(cls, email, password):

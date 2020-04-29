@@ -13,6 +13,7 @@ class UserRegisterForm(FlaskForm):
     password = PasswordField('Password', validators=[Length(min=6)])
     first_name = StringField('First Name', validators=[DataRequired()])
     last_name = StringField('Last Name')
+    measure_system = SelectField('Measure System', choices=[('metric','Metric'), ('us', 'US')])
 
 class UserLoginForm(FlaskForm):
     """Form to authenticate existing users."""
