@@ -80,6 +80,7 @@ class User(db.Model):
     last_name  = db.Column(db.String(30), nullable=True)
     ## Relationships ##
     
+    
 
 
     def get_full_name(self):
