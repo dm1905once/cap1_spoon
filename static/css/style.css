@@ -3,11 +3,17 @@ html {
     font-family: 'Noto Sans', 'Baloo Thambi 2', 'Baloo Da 2', Helvetica, sans-serif;
   }
 
-#nav-img {
-    width: 60px;
-    /* border: 1px solid #808B96;
-    border-radius: 5%; */
-    margin: 5px;
+/* #nav-img {
+    width: 80px;
+    background-color: white;
+    border: 1px solid #806f67;
+    border-radius: 5%;
+    margin: 2px;
+} */
+
+.navbar {
+    /* background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash.jpg"); */
+    background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash_table.jpg");
 }
 /*
 .card {
@@ -18,29 +24,3 @@ html {
 .card img {
      width: 300px;  
 }
-
-
-@media (min-width: 576px) {
-    .card-columns {
-        column-count: 2;
-    }
-}
-
-@media (min-width: 768px) {
-    .card-columns {
-        column-count: 3;
-    }
-}
-
-@media (min-width: 992px) {
-    .card-columns {
-        column-count: 4;
-    }
-}
-
-@media (min-width: 1200px) {
-    .card-columns {
-        column-count: 5;
-    }
-}
-*/
