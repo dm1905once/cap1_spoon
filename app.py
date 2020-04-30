@@ -1,6 +1,6 @@
 """Spoon application."""
 
-from flask import Flask, render_template, request, redirect, session, flash, g
+from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
@@ -187,3 +187,11 @@ def display_recipe_details(recipe_id):
         return render_template('recipes/recipe_details.html', recipe=recipe)
     else:
         return redirect('/')
+
+
+@app.route('/recipes/favorites/<int:recipe_id>', methods=["POST"])
+def add_recipe_to_favs(recipe_id):
+    recipe_body = jsonify(request.form['recipe-body-json'])
+    print(recipe_body['aggregateLikes'])
+    return redirect('/')
+    # print(f"Likes: {recipe_body['aggregateLikes']}")

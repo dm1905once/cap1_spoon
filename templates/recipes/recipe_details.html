@@ -15,7 +15,10 @@
                 <div class="card-body">
                     <h4 class="card-title">You should know ...</h4>
                     <p class="card-text">{{recipe['summary']}}</a></p>
-                    <a class="btn btn-primary btn-block" href="#">Save to Favorites</a>
+                    <form action="/recipes/favorites/{{recipe['id']}}" method="POST">
+                        <input type="hidden" name="recipe-body-json" value='{{recipe|tojson}}'>
+                        <button class="btn btn-primary btn-block">Save to Favorites</button>
+                    </form>
                     <table class="table table-sm mt-3">
                         <tbody>
                                 <tr>
