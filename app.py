@@ -5,7 +5,7 @@ from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingre
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
 from recipe import Recipe
-import requests
+import requests, json
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
@@ -191,7 +191,19 @@ def display_recipe_details(recipe_id):
 
 @app.route('/recipes/favorites/<int:recipe_id>', methods=["POST"])
 def add_recipe_to_favs(recipe_id):
-    recipe_body = jsonify(request.form['recipe-body-json'])
-    print(recipe_body['aggregateLikes'])
+    
+    recipe_body = request.form['recipe-body-json']
+    recipe = json.loads(recipe_body)
+    # import pdb
+    # pdb.set_trace()
+    recipe_id=recipe['id']
+    # Validate if recipe exists already. If not...
+    title=recipe['title']
+    summary=recipe['summary']
+    image=recipe['image']
+    readyInMinutes=recipe['readyInMinutes']
+    servings=recipe['servings']
+    instructions=recipe['analyzedInstructions'][0]['steps']
+    # Then call API to fetch ingredients
     return redirect('/')
     # print(f"Likes: {recipe_body['aggregateLikes']}")
