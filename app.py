@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, redirect, session, flash, g, 
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
-# from recipe import Recipe
 import requests, json
 from sqlalchemy.exc import IntegrityError
 
@@ -221,7 +220,6 @@ def add_recipe_to_favs(recipe_id):
             db.session.add(new_favorite)
     db.session.commit()
 
-
-    # Then call API to fetch ingredients
+    # Then redirect to favorites for this use
+    # return redirect('/user/<int:user_id>/favorites')
     return redirect('/')
-    # print(f"Likes: {recipe_body['aggregateLikes']}")
