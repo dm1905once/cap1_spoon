@@ -20,6 +20,32 @@ class Recipe(db.Model):
     ## Relationships ##
     ingredients = db.relationship('Ingredient')
 
+    @classmethod
+    def save(cls, id, title, summary, image, ready_in_minutes, servings, instructions, ingredients):
+        id=str(id)
+        # Some recipes don't have instructions
+        analyzedInstructions = instructions[0]['steps'] if instructions else None
+
+        new_recipe = cls(id=id, title=title, summary=summary, image=image, ready_in_minutes=ready_in_minutes, servings=servings, instructions=analyzedInstructions)
+        db.session.add(new_recipe)
+
+        # Save recipe ingredients in ingredients table
+        for ingredient in ingredients:
+            new_ingredient = Ingredient(
+                recipe_id   = id,
+                name        = ingredient['name'],
+                aisle       = ingredient['aisle'],
+                image       = ingredient['image'],
+                metric_unit = ingredient['measures']['metric']['unitLong'],
+                metric_value = ingredient['measures']['metric']['amount'],
+                us_unit     = ingredient['measures']['us']['unitLong'],
+                us_value    = ingredient['measures']['us']['amount']
+                )
+            db.session.add(new_ingredient)
+        
+        db.session.commit()
+        return new_recipe
+
 
 ######### COOKLISTS #########
 class Cooklist(db.Model):

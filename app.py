@@ -201,20 +201,19 @@ def add_recipe_to_favs(recipe_id):
     current_recipe = Recipe.query.get(str(recipe['id']))
     
     if current_recipe is None:
-        analyzedInstructions=recipe['analyzedInstructions'][0]['steps'] if recipe['analyzedInstructions'] else None
-        new_recipe = Recipe(
+        # analyzedInstructions=recipe['analyzedInstructions'][0]['steps'] if recipe['analyzedInstructions'] else None
+        new_recipe = Recipe.save(
             id      =recipe['id'],
             title   =recipe['title'],
             summary =recipe['summary'],
             image   =recipe['image'],
             ready_in_minutes=recipe['readyInMinutes'],
             servings=recipe['servings'],
-            instructions=analyzedInstructions
+            instructions=recipe['analyzedInstructions'],
+            ingredients=recipe['extendedIngredients']
         )
         g.user.favorites.append(new_recipe)
         db.session.add(new_recipe)
-
-        #Here's where we populate the ingredients table
         
     else:
         already_favorite = any(every_recipe.id == current_recipe.id for every_recipe in g.user.favorites)
@@ -229,9 +228,13 @@ def add_recipe_to_favs(recipe_id):
 @app.route('/user/<int:user_id>/favorites', methods=["GET"])
 def show_favs(user_id):
 
-    if not g.user or g.user != user_id:
+    if not g.user:
         flash("Please log in to access this content", "danger")
         return redirect("/login")
+
+    if g.user.id != user_id:
+        flash("You can only access your own favorite recipes", "warning")
+        return redirect(f"/user/{g.user.id}/favorites")
     
     favorites = g.user.favorites
 
