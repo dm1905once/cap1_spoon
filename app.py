@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, session, flash, g, 
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
 from private import SPOON_API_KEY
-from recipe import Recipe
+# from recipe import Recipe
 import requests, json
 from sqlalchemy.exc import IntegrityError
 
@@ -191,19 +191,37 @@ def display_recipe_details(recipe_id):
 
 @app.route('/recipes/favorites/<int:recipe_id>', methods=["POST"])
 def add_recipe_to_favs(recipe_id):
+
+    if not g.user:
+        flash("Please log in to access this section", "danger")
+        return redirect("/login")
     
     recipe_body = request.form['recipe-body-json']
     recipe = json.loads(recipe_body)
-    # import pdb
-    # pdb.set_trace()
-    recipe_id=recipe['id']
-    # Validate if recipe exists already. If not...
-    title=recipe['title']
-    summary=recipe['summary']
-    image=recipe['image']
-    readyInMinutes=recipe['readyInMinutes']
-    servings=recipe['servings']
-    instructions=recipe['analyzedInstructions'][0]['steps']
+
+    current_recipe = Recipe.query.get(str(recipe['id']))
+    
+    if current_recipe is None:
+        analyzedInstructions=recipe['analyzedInstructions'][0]['steps'] if recipe['analyzedInstructions'] else None
+        new_recipe = Recipe(
+            id      =recipe['id'],
+            title   =recipe['title'],
+            summary =recipe['summary'],
+            image   =recipe['image'],
+            ready_in_minutes=recipe['readyInMinutes'],
+            servings=recipe['servings'],
+            instructions=analyzedInstructions
+        )
+        g.user.favorites.append(new_recipe)
+        db.session.add(new_recipe)
+    else:
+        already_favorite = any(every_recipe.id == current_recipe.id for every_recipe in g.user.favorites)
+        if already_favorite is False:
+            new_favorite = UserRecipe(user_id=g.user.id, recipe_id=current_recipe.id)
+            db.session.add(new_favorite)
+    db.session.commit()
+
+
     # Then call API to fetch ingredients
     return redirect('/')
     # print(f"Likes: {recipe_body['aggregateLikes']}")

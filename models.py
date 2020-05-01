@@ -11,12 +11,14 @@ class Recipe(db.Model):
     __tablename__ = "recipes"
 
     id                = db.Column(db.String(50), primary_key=True)
-    title             = db.Column(db.String(50), nullable=False)
-    summary           = db.Column(db.String(250), nullable=True)
-    image             = db.Column(db.String(50), nullable=True)
+    title             = db.Column(db.String(250), nullable=False)
+    summary           = db.Column(db.String(10480), nullable=True)
+    image             = db.Column(db.String(250), nullable=True)
     ready_in_minutes  = db.Column(db.Integer, nullable=True)
     servings          = db.Column(db.Integer, nullable=True)
-    instructions      = db.Column(db.JSON, nullable=False)
+    instructions      = db.Column(db.JSON, nullable=True)
+    ## Relationships ##
+    ingredients = db.relationship('Ingredient')
 
 
 ######### COOKLISTS #########
@@ -80,6 +82,7 @@ class User(db.Model):
     last_name  = db.Column(db.String(30), nullable=True)
     ## Relationships ##
     preferences = db.relationship('UserPreference', uselist=False)
+    favorites   = db.relationship('Recipe', secondary='user_recipe')
     
 
 
