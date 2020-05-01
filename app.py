@@ -67,6 +67,7 @@ def do_logout():
 
 @app.route('/', methods=["GET"])
 def home():
+    
     meal_type_form = SearchByMealTypeForm()
     meal_type_form.meal_type.choices =  [(type[0], type[1]) for type in SPOON_MEAL_TYPES]
 
@@ -115,13 +116,17 @@ def login():
     form = UserLoginForm()
 
     if form.validate_on_submit():
-        user = User.authenticate(form.email.data,
-                                 form.password.data)
+        user = User.authenticate(form.email.data, form.password.data)
 
         if user:
             do_login(user)
             flash(f"Hello, {user.first_name}!", "success")
-            return redirect("/")
+            
+            redirecting_user = request.form.get('redirect_after_login', None)
+            if redirecting_user:
+                return redirect(redirecting_user)
+            else:
+                return redirect("/")
         else:
             flash("Invalid credentials.", 'danger')
 
@@ -144,6 +149,8 @@ def logout():
 def list_recipes():
     """Parse search options and retrieve recipes according to search parameters."""
 
+    form = UserRegisterForm()
+
     args = request.args
 
     # Call findByIngredients  API to search by list of ingredients
@@ -154,7 +161,7 @@ def list_recipes():
         recipes = resp.json()
 
         if resp.status_code == 200:
-            return render_template('recipes/recipes.html', recipes=recipes)
+            return render_template('recipes/recipes.html', recipes=recipes, form=form)
         else:
             return redirect('/')
 
@@ -167,7 +174,7 @@ def list_recipes():
         recipes = resp.json()
 
         if resp.status_code == 200:
-            return render_template('recipes/recipes.html', recipes=recipes['results'])
+            return render_template('recipes/recipes.html', recipes=recipes['results'], form=form)
         else:
             return redirect('/')
 
