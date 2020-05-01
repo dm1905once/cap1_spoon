@@ -15,12 +15,8 @@ html {
     /* background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash.jpg"); */
     background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash_table.jpg");
 }
-/*
-.card {
-    max-width: 18rem;
-}
 
-
-.card img {
-     width: 300px;  
+.media img {
+    width: 120px;
+    height: 80px;
 }

@@ -213,6 +213,9 @@ def add_recipe_to_favs(recipe_id):
         )
         g.user.favorites.append(new_recipe)
         db.session.add(new_recipe)
+
+        #Here's where we populate the ingredients table
+        
     else:
         already_favorite = any(every_recipe.id == current_recipe.id for every_recipe in g.user.favorites)
         if already_favorite is False:
@@ -220,6 +223,16 @@ def add_recipe_to_favs(recipe_id):
             db.session.add(new_favorite)
     db.session.commit()
 
-    # Then redirect to favorites for this use
-    # return redirect('/user/<int:user_id>/favorites')
-    return redirect('/')
+    return redirect(f'/user/{g.user.id}/favorites')
+
+
+@app.route('/user/<int:user_id>/favorites', methods=["GET"])
+def show_favs(user_id):
+
+    if not g.user or g.user != user_id:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+    
+    favorites = g.user.favorites
+
+    return render_template('recipes/recipes_favorites.html', favorites=favorites)

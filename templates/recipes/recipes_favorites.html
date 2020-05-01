@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block page_title %} 
+    Recipes for you
+{% endblock %}
+
+
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+        {% for favorite in favorites %}
+
+            <div class="row my-3">
+                <div class="col-sm-10">
+                    <div class="media">
+                        <a href="/{{favorite.id}}">
+                            <img  class="align-self-center pr-3"src="{{favorite.image}}">
+                        </a>
+                        <div class="media-body">
+                            <a href="/recipes/{{favorite.id}}"><span class="lead">{{favorite.title}}   </span></a>
+                            <p class="">{{favorite.summary}}</p>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
