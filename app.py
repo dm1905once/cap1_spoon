@@ -231,23 +231,45 @@ def add_recipe_to_favs(recipe_id):
             db.session.add(new_favorite)
     db.session.commit()
 
-    return redirect(f'/user/{g.user.id}/favorites')
+    return redirect(f'/user/favorites')
 
 
-@app.route('/user/<int:user_id>/favorites', methods=["GET"])
-def show_favs(user_id):
+@app.route('/user/favorites', methods=["GET"])
+def show_favs():
 
     if not g.user:
         flash("Please log in to access this content", "danger")
         return redirect("/login")
 
-    if g.user.id != user_id:
-        flash("You can only access your own favorite recipes", "warning")
-        return redirect(f"/user/{g.user.id}/favorites")
-    
     favorites = g.user.favorites
+    userlists = g.user.cooklists
 
-    return render_template('recipes/recipes_favorites.html', favorites=favorites)
+    return render_template('recipes/recipes_favorites.html', favorites=favorites, userlists=userlists)
+
+
+@app.route('/user/favorites', methods=["POST"])
+def add_recipe_to_cooklist():
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    cooklist_id = request.form.get("add-cooklist-id")
+    recipe_id = request.form.get("add-recipe-id")
+
+    new_cooklist_recipe = CooklistRecipe(recipe_id=recipe_id, cooklist_id=cooklist_id)
+
+    if new_cooklist_recipe:
+        db.session.add(new_cooklist_recipe)
+        db.session.commit()
+        flash(f"Recipe added succesfully", "success")
+    else:
+        flash(f"Error adding recipe to cooklist", "error")
+
+    favorites = g.user.favorites
+    userlists = g.user.cooklists
+        
+    return render_template('recipes/recipes_favorites.html', favorites=favorites, userlists=userlists)
 
 @app.route('/cooklists/new', methods=["GET", "POST"])
 def create_cooklist():

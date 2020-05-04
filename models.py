@@ -19,6 +19,7 @@ class Recipe(db.Model):
     instructions      = db.Column(db.JSON, nullable=True)
     ## Relationships ##
     ingredients = db.relationship('Ingredient')
+    cooklists   = db.relationship('Cooklist', secondary='cooklists_recipes')
 
     @classmethod
     def save(cls, id, title, summary, image, ready_in_minutes, servings, instructions, ingredients):
@@ -116,6 +117,7 @@ class User(db.Model):
     ## Relationships ##
     preferences = db.relationship('UserPreference', uselist=False)
     favorites   = db.relationship('Recipe', secondary='user_recipe')
+    cooklists   = db.relationship('Cooklist')
     
 
 
