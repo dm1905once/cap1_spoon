@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Create a new cooklist</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <p>Cooklists are a nice way to group your favorite recipes together and identify them with a label. Think of it as a playlist but for recipes!</p>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-sm-6 offset-sm-3">
+            <form method="POST" action="/cooklists/new">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <div class="lead">{{form.list_name.label}}</div>
+                    {{form.list_name(class_="form-control", placeholder="e.g. Christmas dinner")}}
+                </div>
+                {% for error in form.list_name.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
+                <div class="form-group">
+                    <div class="lead">{{form.description.label}}</div>
+                    {{form.description(class_="form-control", rows='2', placeholder="e.g. Recipes for the 4 course Christmas dinner 2020")}}
+                </div>
+                {% for error in form.description.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
+                <button class="btn btn-secondary btn-lg btn-block" type="submit">Create Cooklist</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

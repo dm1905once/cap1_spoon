@@ -23,8 +23,7 @@ class Recipe(db.Model):
     @classmethod
     def save(cls, id, title, summary, image, ready_in_minutes, servings, instructions, ingredients):
         id=str(id)
-        # Some recipes don't have instructions
-        analyzedInstructions = instructions[0]['steps'] if instructions else None
+        analyzedInstructions = instructions[0]['steps'] if instructions else None  # Some recipes don't have instructions
 
         new_recipe = cls(id=id, title=title, summary=summary, image=image, ready_in_minutes=ready_in_minutes, servings=servings, instructions=analyzedInstructions)
         db.session.add(new_recipe)
@@ -54,9 +53,17 @@ class Cooklist(db.Model):
 
     id           = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id      = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
-    list_name    = db.Column(db.String(50), nullable=False)
+    list_name    = db.Column(db.String(50), nullable=False, unique=True)
     description  = db.Column(db.String(250), nullable=True)
     created_date = db.Column(db.DateTime, nullable=False)
+    ## Relationships ##
+    recipes   = db.relationship('Recipe', secondary='cooklists_recipes')
+
+    def print_created_date(self):
+        return print_datetime(self.created_date)
+
+    ## Properties ##
+    created_date_readable = property(print_created_date)
 
 
 ######### COOKLISTS < RECIPES #########
@@ -154,3 +161,6 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
     # db.create_all()
+
+def print_datetime(some_datetime):
+    return f"{some_datetime.strftime('%c')}"

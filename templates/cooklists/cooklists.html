@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Your cooklists</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <a class="p-2 mb-2 btn btn-secondary" href="/cooklists/new">Create a new cooklist</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+          <div class="list-group" id="list-tab" role="tablist">
+            <a class="list-group-item list-group-item-action list-group-item-secondary" id="list-home-list" data-toggle="list" href="#list-home" role="tab">Cooklists:</a>
+            {% for cooklist in cooklists %}
+                <a class="list-group-item list-group-item-action" id="{{ cooklist.id }}-list" data-toggle="list" href="#profile-{{ cooklist.id }}" role="tab">{{ cooklist.list_name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="list-home" role="tabpanel">Select cooklist from the left panel to display more info</div>
+            {% for cooklist in cooklists %}
+                <div class="tab-pane fade" id="profile-{{ cooklist.id }}" role="tabpanel">
+                    <div class="card">
+                        <h5 class="card-header">{{ cooklist.list_name }} 
+                            {% if cooklist.recipes|length > 0 %}
+                                <a href="#" class="btn btn-primary float-right">Generate grocery list (TODO)</a>
+                            {% endif %}
+                        </h5>
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-muted">Created on: {{ cooklist.created_date_readable }}</h6>
+                            <p class="card-text">{{ cooklist.description }}</p>
+
+                            {% if cooklist.recipes|length > 0 %}
+                                <h6 class="card-title">Recipes:</h6>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Recipe #</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                    </thead>
+                                        <tbody>
+                                        {% for recipe in cooklist.recipes %}
+                                            <tr>
+                                                <th>{{ recipe.id }}</th>
+                                                <td>{{ recipe.title }}</td>
+                                                <td><a href="#" class="btn btn-warning"><i class="far fa-trash-alt"></i> Delete</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                            {% else%}
+                                <p>No recipes have been added to this cooklist</p>
+                            {%endif%}
+                        </div>
+                  </div>
+                </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+{% endblock %}

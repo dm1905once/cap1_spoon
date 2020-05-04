@@ -2,10 +2,12 @@
 
 from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
-from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm
+from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm, CooklistForm
 from private import SPOON_API_KEY
 import requests, json
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import desc
+from datetime import datetime
 
 app = Flask(__name__)
 # from flask_debugtoolbar import DebugToolbarExtension
@@ -76,7 +78,7 @@ def home():
     ingredients_form.ingredients.choices = [(ingredient.name, ingredient.name) for ingredient in ingredients_list]
 
     return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
-    # return render_template('temp.html')
+    # return render_template('cooklists/new_cooklist.html')
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -246,3 +248,39 @@ def show_favs(user_id):
     favorites = g.user.favorites
 
     return render_template('recipes/recipes_favorites.html', favorites=favorites)
+
+@app.route('/cooklists/new', methods=["GET", "POST"])
+def create_cooklist():
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    form = CooklistForm()
+
+    if form.validate_on_submit():
+        list_name   = request.form.get('list_name')
+        description = request.form.get('description', None)
+        new_cooklist = Cooklist(user_id=g.user.id, list_name=list_name, description=description, created_date=datetime.now())
+        db.session.add(new_cooklist)
+        db.session.commit()
+
+        flash(f"Cooklist {list_name} added successfully", "success")
+        return redirect("/user/cooklists")
+
+    else:
+        return render_template('cooklists/new_cooklist.html', form=form)
+
+
+@app.route('/user/cooklists', methods=["GET"])
+def show_cooklists():
+    """Display user cooklists or handle parameters to create a new one"""
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    # cooklists = g.user.cooklists
+    cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
+
+    return render_template('cooklists/cooklists.html', cooklists=cooklists)
