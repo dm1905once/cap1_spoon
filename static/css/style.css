@@ -16,7 +16,18 @@ html {
     background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash_table.jpg");
 }
 
+/*
 .media img {
     width: 120px;
     height: 80px;
+}
+*/
+
+.card-img-favorite{
+    /* width: 120px; */
+    /* max-width: 240px; */
+    /* height: 80px;    */
+    width: 100%;
+    height: 20vw;
+    object-fit: cover;
 }

@@ -17,49 +17,67 @@
         {% for favorite in favorites %}
 
             <div class="row my-3">
-                <div class="col-sm-10">
-                    <div class="media">
-                        <a href="/{{favorite.id}}">
-                            <img  class="align-self-center pr-3"src="{{favorite.image}}">
-                        </a>
-                        <div class="media-body">
-                            <a href="/recipes/{{favorite.id}}"><span class="lead">{{favorite.title}}   </span></a>
-                            <p class="">{{favorite.summary}}</p>
+                <div class="col">
+                    <div class="card mb-3">
 
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img class="card-img-favorite p-2" src="{{favorite.image}}">
+                            </div>
 
-                            {% if favorite.cooklists|selectattr("user_id", "equalto", g.user.id) %}
-                                <lead>Included in the following cooklists:</lead>
-                                <ul class="list-group list-group-horizontal">
-                                    {% for cooklist in favorite.cooklists|selectattr("user_id", "equalto", g.user.id) %}
-                                        <li class="list-group-item">{{cooklist.list_name}}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+                            <div class="col-md-9">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="/recipes/{{favorite.id}}">{{favorite.title}}</a>
+                                        <button class="btn btn-warning float-right">Remove from Favorites</button>
+                                    </h5>
+                                    <p class="card-text">{{favorite.summary}}</p>
+                                </div>
 
-                            
-
-
-
-                            <div class="my-3">Add recipe to cooklist</div>
-                                <form action="" method="POST">
-                                    <div class="form-row align-items-center">
-                                        <div class="col-auto my-1">
-                                            <input type="hidden" value="{{favorite.id}}" name="add-recipe-id">
-                                            <select class="custom-select" name="add-cooklist-id">
-                                                <option selected>Select available cooklist from this list:</option>
-                                                {% for userlist in userlists %}
-                                                    {% if userlist not in favorite.cooklists %}
-                                                        <option value="{{userlist.id}}">{{userlist.list_name}}</option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="col-auto my-1">
-                                            <button type="submit" class="btn btn-primary">Click to Add</button>
-                                        </div>
-                                    </div>
-                                </form>
+                            </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="card-body bg-light">
+                                {% if favorite.cooklists|selectattr("user_id", "equalto", g.user.id) %}
+                                    <h5>Included in the following cooklists:</h5>
+                                    <ul class="list-group list-group-horizontal">
+                                        {% for cooklist in favorite.cooklists|selectattr("user_id", "equalto", g.user.id) %}
+                                            <li class="list-group-item">{{cooklist.list_name}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="card-body  bg-light">
+                                    <h5 class="my-1">Add recipe to cooklist:</h5>
+                                    <form action="" method="POST">
+                                        <div class="form-row align-items-center">
+                                            <div class="col-auto my-1">
+                                                <input type="hidden" value="{{favorite.id}}" name="add-recipe-id">
+                                                <select class="custom-select" name="add-cooklist-id">
+                                                    <option selected>Select available cooklist from this list:</option>
+                                                    {% for userlist in userlists %}
+                                                        {% if userlist not in favorite.cooklists %}
+                                                            <option value="{{userlist.id}}">{{userlist.list_name}}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col-auto my-1">
+                                                <button type="submit" class="btn btn-primary">Click to Add</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
