@@ -52,7 +52,13 @@
                                             <tr>
                                                 <th>{{ recipe.id }}</th>
                                                 <td>{{ recipe.title }}</td>
-                                                <td><a href="#" class="btn btn-warning"><i class="far fa-trash-alt"></i> Delete</td>
+                                                <td>
+                                                    <form action="/user/cooklists/remove_recipe" method="POST">
+                                                        <input type="hidden" value="{{recipe.id}}" name="data-recipe-id">
+                                                        <input type="hidden" value="{{cooklist.id}}" name="data-cooklist-id">
+                                                        <button class="btn btn-warning" type="submit"><i class="far fa-trash-alt"></i> Remove</button>
+                                                    </form>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

@@ -306,3 +306,28 @@ def show_cooklists():
     cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
 
     return render_template('cooklists/cooklists.html', cooklists=cooklists)
+
+
+@app.route('/user/cooklists/remove_recipe', methods=["POST"])
+def remove_recipe_from_cooklist():
+    """Remove a recipe from a cooklist"""
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    cooklist_id = request.form.get("data-cooklist-id")
+    recipe_id = request.form.get("data-recipe-id")
+
+    remove_cooklist_recipe = CooklistRecipe.query.filter(CooklistRecipe.recipe_id==recipe_id, CooklistRecipe.cooklist_id==cooklist_id).first()
+
+    if remove_cooklist_recipe:
+        db.session.delete(remove_cooklist_recipe)
+        db.session.commit()
+        flash(f"Recipe removed succesfully", "success")
+    else:
+        flash(f"Error removing recipe to cooklist", "error")
+
+    cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
+
+    return render_template('cooklists/cooklists.html', cooklists=cooklists)
