@@ -3,6 +3,11 @@ html {
     font-family: 'Noto Sans', 'Baloo Thambi 2', 'Baloo Da 2', Helvetica, sans-serif;
   }
 
+.jumbotron {
+    background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash.jpg");
+    background-size: cover;
+  }
+
 /* #nav-img {
     width: 80px;
     background-color: white;
@@ -12,7 +17,6 @@ html {
 } */
 
 .navbar {
-    /* background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash.jpg"); */
     background-image: url("/static/img/lukas-blazek-f-TWhXOrLiU-unsplash_table.jpg");
 }
 

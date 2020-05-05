@@ -1,42 +1,80 @@
-{% extends 'base.html' %}
-
-{% block page_title %} 
-    Welcome to Spoon
-{% endblock %}
-
-
-
-{% block main_content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans|Baloo+Da+2|Baloo+Thambi+2&display=swap" rel="stylesheet">
+    <title>{% block page_title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-3">Spoon</h1>
+            <p class="lead">Search, organize and access your favorite recipes conveniently in one place.<p>
+        </div>
+        <div class="float-right">
+            Photo by
+            <a style="background-color:rgba(9, 173, 28, 0.4);color:lightgrey;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px" href="https://unsplash.com/@goumbik?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from Lukas Blazek"><span style="display:inline-block;padding:2px 3px"><svg xmlns="http://www.w3.org/2000/svg" style="height:12px;width:auto;position:relative;vertical-align:middle;top:-2px;fill:lightgray" viewBox="0 0 32 32"><title>unsplash-logo</title><path d="M10 9V0h12v9H10zm12 5h10v18H0V14h10v9h12v-9z"></path></svg></span><span style="display:inline-block;padding:2px 3px">Lukas Blazek</span></a>
+        </div>
+    </div>
     <div class="container">
         <!-- <div class="display-4">Welcome</div> -->
 
-        <div class="row mt-4">
-            <div class="col-sm-6">
-                <form action="/recipes" method="GET">
-                    {{ meal_type_form.hidden_tag() }}
-
-                    <div class="form-group">
-                        <h4>{{ meal_type_form.meal_type.label }}</h4>
-                        {{meal_type_form.meal_type(class_="form-control")}}
-                    </div>
-                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Display Recipes by Meal Type</button>
-                </form>
+        <div class="card text-center">
+            <div class="card-body">
+              <h5 class="card-title display-4">Welcome to Spoon!</h5>
+              <p class="card-text h4 mb-3">Spoon allows you to browse through thousands of recipes, pick your favorites, organize them in cooklists and generate your grocery shopping lists.</p>
+              {% if g.user %}
+                <p class="alert alert-success">User {{g.user.first_name}} has logged in. Welcome back! Click <a href="/logout">here</a> to logout </p>
+              {% else %}
+                <a href="/login" class="btn btn-outline-success">Login</a> or <a href="/register" class="btn btn-outline-success">Register</a> to access all the features.
+              {% endif %}
             </div>
-        </div>
+          </div>
 
-        <div class="row mt-4">
-            <div class="col-sm-6">
+        <div class="card-deck mt-3">
+            <div class="card">
                 <form action="/recipes" method="GET">
-                    {{ ingredients_form.hidden_tag() }}
+                    <!-- <div class="card-header">Start here</div> -->
+                    <h5 class="card-title"></h5>
+                    <div class="card-body">
+                        {{meal_type_form.hidden_tag()}}
+                        <div class="form-group">
+                            <h4>{{ meal_type_form.meal_type.label }}</h4>
+                            {{meal_type_form.meal_type(class_="form-control")}}
+                        </div>
+                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Display Recipes by Meal Type</button>
+                    </div>  
+                </form>
+              </div>
 
+              <div class="card">
+                <!-- <div class="card-header">...or here</div> -->
+              <div class="card-body">
+                <form action="/recipes" method="GET">
+                    {{meal_type_form.hidden_tag()}}
                     <div class="form-group">
                         <h4>{{ ingredients_form.ingredients.label }}</h4>
                         {{ingredients_form.ingredients(class_="form-control")}}
                     </div>
                     <button class="btn btn-secondary btn-lg btn-block" type="submit">Display Recipes by Ingredients</button>
                 </form>
+              </div>
+            </div>
+
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-sm-6">
+                
             </div>
         </div>
 
     </div>
-{% endblock %}
+
+
+</body>
+</html>
