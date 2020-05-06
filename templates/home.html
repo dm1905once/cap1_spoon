@@ -29,6 +29,7 @@
               <p class="card-text h4 mb-3">Spoon allows you to browse through thousands of recipes, pick your favorites, organize them in cooklists and generate your grocery shopping lists.</p>
               {% if g.user %}
                 <p class="alert alert-success">User {{g.user.first_name}} has logged in. Welcome back! Click <a href="/logout">here</a> to logout </p>
+                <p>Visit <a href="/user/favorites">your favorite recipes</a>, go to <a href="/user/cooklists">your cooklists</a> or search for new recipes below.</p>
               {% else %}
                 <a href="/login" class="btn btn-outline-success">Login</a> or <a href="/register" class="btn btn-outline-success">Register</a> to access all the features.
               {% endif %}
