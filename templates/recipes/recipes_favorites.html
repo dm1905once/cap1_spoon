@@ -32,7 +32,10 @@
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         <a href="/recipes/{{favorite.id}}">{{favorite.title}}</a>
-                                        <button class="btn btn-warning float-right">Remove from Favorites</button>
+                                        <form action="/user/favorites/remove_recipe" method="POST">
+                                            <input type="hidden" name="delete-recipe-id" value="{{favorite.id}}">
+                                            <button class="btn btn-warning float-right">Remove from Favorites</button>
+                                        </form>
                                     </h5>
                                     <p class="card-text recipe-summary">{{favorite.summary}}</p>
                                 </div>

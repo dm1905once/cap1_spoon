@@ -269,6 +269,30 @@ def add_recipe_to_cooklist():
         
     return render_template('recipes/recipes_favorites.html', favorites=favorites, userlists=userlists)
 
+@app.route('/user/favorites/remove_recipe', methods=["POST"])
+def remove_favorite_recipe():
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    recipe_id = request.form.get("delete-recipe-id")
+
+    remove_favorite = UserRecipe.query.filter(UserRecipe.user_id==g.user.id, UserRecipe.recipe_id==recipe_id).first()
+
+    if remove_favorite:
+        db.session.delete(remove_favorite)
+        db.session.commit()
+        flash(f"Recipe removed succesfully", "success")
+    else:
+        flash(f"Error removing recipe from Favorites", "error")
+
+    favorites = g.user.favorites
+    userlists = g.user.cooklists
+        
+    return render_template('recipes/recipes_favorites.html', favorites=favorites, userlists=userlists)
+
+
 @app.route('/cooklists/new', methods=["GET", "POST"])
 def create_cooklist():
 
@@ -324,7 +348,7 @@ def remove_recipe_from_cooklist():
         db.session.commit()
         flash(f"Recipe removed succesfully", "success")
     else:
-        flash(f"Error removing recipe to cooklist", "error")
+        flash(f"Error removing recipe from cooklist", "error")
 
     cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
 
