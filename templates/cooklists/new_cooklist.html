@@ -3,9 +3,14 @@
 {% block main_content %}
 
 <div class="container">
-    <div class="row">
+    <div class="row my-3">
         <div class="col-sm-6 offset-sm-3">
-            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Create a new cooklist</div>
+            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">New cooklist</div>
+        </div>
+        <div class="col-sm-3 text-right">
+            {% if g.user %}
+                <span class="lead">Logged in as {{g.user.first_name}}</span>
+            {% endif %}
         </div>
     </div>
     <div class="row">
@@ -27,7 +32,7 @@
                     {{form.description(class_="form-control", rows='2', placeholder="e.g. Recipes for the 4 course Christmas dinner 2020")}}
                 </div>
                 {% for error in form.description.errors %}<small class="form-text text-danger">{{ error }}</small>{% endfor %}
-                <button class="btn btn-secondary btn-lg btn-block" type="submit">Create Cooklist</button>
+                <button class="btn btn-success btn-lg btn-block" type="submit">Create Cooklist</button>
                 <a href="/user/cooklists" class="btn btn-outline-secondary btn-lg btn-block" >Cancel and Go Back to Cooklists</a>
             </form>
         </div>

@@ -3,14 +3,17 @@
 {% block main_content %}
 
 <div class="container">
-    <div class="row">
+    <div class="row my-3">
         <div class="col-sm-6 offset-sm-3">
             <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Your cooklists</div>
         </div>
+        <div class="col-sm-3 text-right">
+            <span class="lead">Logged in as {{g.user.first_name}}</span>
+        </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 offset-sm-3">
-            <a class="p-2 mb-2 btn btn-secondary" href="/cooklists/new">Create a new cooklist</a>
+        <div class="col-sm-6 offset-sm-3 mb-2">
+            <a class="p-2 mb-2 btn btn-success" href="/cooklists/new">Create a new cooklist</a>
         </div>
     </div>
     <div class="row">

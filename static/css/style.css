@@ -13,27 +13,15 @@ html {
     text-decoration: none;
 }
 
-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.01);
-    background: var(--bg-color);
-    z-index: 4;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 .nav-links{
     position: absolute;
     right: 0%;
     /* transform: translate(-50%, 0); */
   }
 
-.nav-links a{
-    margin: 0 20px;
+a.nav-link {
+    margin: 0 10px;
+    font-size: 1.8em;
   }
 
 /* #nav-img {

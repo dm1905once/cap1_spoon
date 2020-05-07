@@ -8,9 +8,12 @@
 
 {% block main_content %}
     <div class="container">
-        <div class="row">
+        <div class="row my-3">
             <div class="col-sm-6 offset-sm-3">
                 <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Your favorite recipes</div>
+            </div>
+            <div class="col-sm-3 text-right">
+                <span class="lead">Logged in as {{g.user.first_name}}</span>
             </div>
         </div>
         <div class="row">
@@ -53,6 +56,7 @@
                         </div>
 
                         <div class="row">
+                            {% set ns = namespace(at_least_one_cooklist = false) %}
                             <div class="col">
                                 <div class="card-body  bg-light">
                                     <h5 class="my-1">Add recipe to cooklist:</h5>
@@ -65,12 +69,17 @@
                                                     {% for userlist in userlists %}
                                                         {% if userlist not in favorite.cooklists %}
                                                             <option value="{{userlist.id}}">{{userlist.list_name}}</option>
+                                                            {% set ns.at_least_one_cooklist = true %}
                                                         {% endif %}
                                                     {% endfor %}
                                                 </select>
                                             </div>
                                             <div class="col-auto my-1">
-                                                <button type="submit" class="btn btn-primary">Click to Add</button>
+                                                {% if ns.at_least_one_cooklist %}
+                                                    <button type="submit" class="btn btn-success">Click to Add</button>
+                                                {% else %}
+                                                    <a href="/cooklists/new" class="btn btn-outline-secondary">Create a cooklist</a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </form>

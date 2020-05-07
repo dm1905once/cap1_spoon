@@ -9,6 +9,17 @@
 {% block main_content %}
     <div class="container">
 
+        <div class="row my-3">
+            <div class="col-sm-6 offset-sm-3">
+                <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Browse recipes</div>
+            </div>
+            <div class="col-sm-3 text-right">
+                {% if g.user %}
+                    <span class="lead">Logged in as {{g.user.first_name}}</span>
+                {% endif %}
+            </div>
+        </div>
+
         <div class="row">
         {% for recipe in recipes %}
             <div class="col-6 col-sm-4">
@@ -24,7 +35,7 @@
                         {% if g.user %}
                             <a class="btn btn-sm btn-outline-secondary" href="/recipes/{{recipe['id']}}">See Recipe</a>
                         {% else %}
-                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#modal2">Login Modal</button>
+                            <button class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#modal2">See Recipe</button>
                             <div class="modal" id="modal2">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

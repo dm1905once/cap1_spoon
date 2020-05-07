@@ -122,13 +122,12 @@ def login():
 
         if user:
             do_login(user)
-            flash(f"Hello, {user.first_name}!", "success")
             
             redirecting_user = request.form.get('redirect_after_login', None)
             if redirecting_user:
                 return redirect(redirecting_user)
             else:
-                return redirect("/")
+                return redirect("/user/favorites")
         else:
             flash("Invalid credentials.", 'danger')
 
@@ -141,7 +140,6 @@ def logout():
     """Handle logout of user."""
 
     do_logout()
-    flash("User logged out", "info")
     return redirect('/')
 
 
