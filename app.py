@@ -278,10 +278,16 @@ def remove_favorite_recipe():
 
     recipe_id = request.form.get("delete-recipe-id")
 
-    remove_favorite = UserRecipe.query.filter(UserRecipe.user_id==g.user.id, UserRecipe.recipe_id==recipe_id).first()
+    remove_recipe_favorite = UserRecipe.query.filter(UserRecipe.user_id==g.user.id, UserRecipe.recipe_id==recipe_id).first()
 
-    if remove_favorite:
-        db.session.delete(remove_favorite)
+    if remove_recipe_favorite:
+        # Remove recipe from favorites list
+        db.session.delete(remove_recipe_favorite)
+        # Remove recipe from user cooklists
+        remove_recipe_cooklists = CooklistRecipe.query.filter(CooklistRecipe.recipe_id==recipe_id,CooklistRecipe.cooklist_id.in_(list.id for list in g.user.cooklists)).all()
+        for entry in remove_recipe_cooklists:
+            db.session.delete(entry)
+
         db.session.commit()
         flash(f"Recipe removed succesfully", "success")
     else:

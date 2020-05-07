@@ -43,9 +43,8 @@
         </nav>
     </div>
 
-
-        {% for msg in get_flashed_messages() %}
-        <div class="alert alert-light">
+        {% for cat,msg in get_flashed_messages(with_categories=true) %}
+        <div class="alert alert-{{cat}}">
             <p>{{ msg }}</p>
         </div>
         {% endfor %}
