@@ -39,7 +39,6 @@
         <div class="card-deck mt-3">
             <div class="card">
                 <form action="/recipes" method="GET">
-                    <!-- <div class="card-header">Start here</div> -->
                     <h5 class="card-title"></h5>
                     <div class="card-body">
                         {{meal_type_form.hidden_tag()}}
@@ -53,29 +52,24 @@
               </div>
 
               <div class="card">
-                <!-- <div class="card-header">...or here</div> -->
-              <div class="card-body">
-                <form action="/recipes" method="GET">
-                    {{meal_type_form.hidden_tag()}}
-                    <div class="form-group">
-                        <h4>{{ ingredients_form.ingredients.label }}</h4>
-                        {{ingredients_form.ingredients(class_="form-control")}}
-                    </div>
-                    <button class="btn btn-secondary btn-lg btn-block" type="submit">Display Recipes by Ingredients</button>
-                </form>
-              </div>
+                <div class="card-body">
+                  <form action="/recipes" method="GET">
+                      {{meal_type_form.hidden_tag()}}
+                      <div class="form-group">
+                          <h4>{{ ingredients_form.ingredients.label }}</h4>
+                          <input class="form-control" id="textbox" type="text" placeholder="Type ingredient name to filter list">
+                          {{ingredients_form.ingredients(class_="form-control")}}
+                      </div>
+                      <button class="btn btn-secondary btn-lg btn-block" type="submit">Display Recipes by Ingredients</button>
+                  </form>
+                </div>
             </div>
 
-        </div>
-
-        <div class="row mt-4">
-            <div class="col-sm-6">
-                
-            </div>
         </div>
 
     </div>
 
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
 </body>
 </html>
