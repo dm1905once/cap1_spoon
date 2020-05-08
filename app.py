@@ -8,6 +8,7 @@ import requests, json
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import desc
 from datetime import datetime
+from flask_paginate import Pagination
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "asdfasdflkgflkgf"
@@ -118,27 +119,30 @@ def list_recipes():
     """Parse search options and retrieve recipes according to search parameters."""
 
     form = UserRegisterForm()
-
     args = request.args
+
+    # Pagination 
+    search = False
+    if "q" in args:
+        search = True
+    page = request.args.get('page', type=int, default=1)
 
     # Call findByIngredients  API to search by list of ingredients
     if "ingredients" in args:
         selected_ingredients='+'.join(args.getlist("ingredients"))
         resp = requests.get(f"{SPOON_API_URL}/recipes/findByIngredients", params={"apiKey":{SPOON_API_KEY}, "ingredients":selected_ingredients, "ignorePantry":"true", "ranking":1, "number":12})
-
         recipes = resp.json()
+        pagination = Pagination(page=page, total=len(recipes), per_page=3, search=False, record_name='recipes', display_msg='Displaying recipes <b>{start} - {end}</b> of a total of {total}', css_framework='bootstrap4', alignment='center')
 
         if resp.status_code == 200:
-            return render_template('recipes/recipes.html', recipes=recipes, form=form)
+            return render_template('recipes/recipes.html', recipes=recipes, form=form, pagination=pagination)
         else:
             return redirect('/')
 
     # Call complexSearch API to search by mealtype
     if "meal_type" in args:
         meal_type=args.get("meal_type")
-
         resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
-
         recipes = resp.json()
 
         if resp.status_code == 200:
