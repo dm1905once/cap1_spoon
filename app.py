@@ -18,6 +18,8 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 SPOON_API_URL = "https://api.spoonacular.com"
 CURR_USER_KEY = "current_user"
+PAGINATION_PER_PAGE=3
+PAGINATION_SEARCH=False
 
 @app.before_request
 def add_user_to_g():
@@ -122,17 +124,17 @@ def list_recipes():
     args = request.args
 
     # Pagination 
-    search = False
-    if "q" in args:
-        search = True
     page = request.args.get('page', type=int, default=1)
+    pagination_offset = (page - 1) * PAGINATION_PER_PAGE
 
     # Call findByIngredients  API to search by list of ingredients
     if "ingredients" in args:
         selected_ingredients='+'.join(args.getlist("ingredients"))
         resp = requests.get(f"{SPOON_API_URL}/recipes/findByIngredients", params={"apiKey":{SPOON_API_KEY}, "ingredients":selected_ingredients, "ignorePantry":"true", "ranking":1, "number":12})
-        recipes = resp.json()
-        pagination = Pagination(page=page, total=len(recipes), per_page=3, search=False, record_name='recipes', display_msg='Displaying recipes <b>{start} - {end}</b> of a total of {total}', css_framework='bootstrap4', alignment='center')
+        recipes_list = resp.json()
+        recipes=recipes_list[pagination_offset : pagination_offset+PAGINATION_PER_PAGE]
+
+        pagination = Pagination(page=page, per_page=PAGINATION_PER_PAGE, total=len(recipes_list), search=PAGINATION_SEARCH, record_name='recipes', display_msg='Displaying recipes <b>{start} - {end}</b> of a total of {total}', css_framework='bootstrap4', alignment='center')
 
         if resp.status_code == 200:
             return render_template('recipes/recipes.html', recipes=recipes, form=form, pagination=pagination)
