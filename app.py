@@ -1,7 +1,7 @@
 """Spoon application."""
 
 from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
-from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList 
+from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList, MealTypes
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm, CooklistForm
 from private import SPOON_API_KEY
 import requests, json
@@ -10,35 +10,12 @@ from sqlalchemy import desc
 from datetime import datetime
 
 app = Flask(__name__)
-# from flask_debugtoolbar import DebugToolbarExtension
-# debug = DebugToolbarExtension(app)
-
 app.config['SECRET_KEY'] = "asdfasdflkgflkgf"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///spoon'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
-
 SPOON_API_URL = "https://api.spoonacular.com"
-SPOON_MEAL_TYPES=[
-    ("main course", "Main course"),
-    ("side dish", "Side dish"),
-    ("dessert", "Dessert"),
-    ("appetizer","Appetizer"),
-    ("salad", "Salad"),
-    ("bread", "Bread"),
-    ("breakfast", "Breakfast"),
-    ("soup", "Soup"),
-    ("beverage", "Beverage"),
-    ("sauce", "Sauce"),
-    ("marinade", "Marinade"),
-    ("fingerfood", "Fingerfood"),
-    ("snack", "Snack"),
-    ("drink", "Drink")
-]
-
-### User / Session functions
-
 CURR_USER_KEY = "current_user"
 
 @app.before_request
@@ -47,7 +24,6 @@ def add_user_to_g():
 
     if CURR_USER_KEY in session:
         g.user = User.query.get(session[CURR_USER_KEY])
-
     else:
         g.user = None
 
@@ -55,30 +31,25 @@ def do_login(user):
     """Log in user."""
     session[CURR_USER_KEY] = user.id
 
-
 def do_logout():
     """Logout user."""
     if CURR_USER_KEY in session:
         del session[CURR_USER_KEY]
-
-
-
-
 
 #### Routes ####
 
 @app.route('/', methods=["GET"])
 def home():
     
+    meal_types = MealTypes.query.all()
     meal_type_form = SearchByMealTypeForm()
-    meal_type_form.meal_type.choices =  [(type[0], type[1]) for type in SPOON_MEAL_TYPES]
+    meal_type_form.meal_type.choices =  [(type.meal_type_name, type.meal_type_label) for type in meal_types]
 
     ingredients_form = SearchByIngredientsForm()
     ingredients_list = IngredientList.query.all()
     ingredients_form.ingredients.choices = [(ingredient.name, ingredient.name) for ingredient in ingredients_list]
 
     return render_template('home.html', meal_type_form=meal_type_form, ingredients_form=ingredients_form)
-    # return render_template('cooklists/new_cooklist.html')
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -134,15 +105,12 @@ def login():
     return render_template('users/login.html', form=form)
 
 
-
 @app.route('/logout')
 def logout():
     """Handle logout of user."""
 
     do_logout()
     return redirect('/')
-
-
 
 
 @app.route('/recipes', methods=["GET"])
@@ -179,8 +147,6 @@ def list_recipes():
             return redirect('/')
 
 
-
-
 @app.route('/recipes/<int:recipe_id>', methods=["GET"])
 def display_recipe_details(recipe_id):
     """Display full details of the recipe."""
@@ -208,7 +174,6 @@ def add_recipe_to_favs(recipe_id):
     current_recipe = Recipe.query.get(str(recipe['id']))
     
     if current_recipe is None:
-        # analyzedInstructions=recipe['analyzedInstructions'][0]['steps'] if recipe['analyzedInstructions'] else None
         new_recipe = Recipe.save(
             id      =recipe['id'],
             title   =recipe['title'],
@@ -330,7 +295,6 @@ def show_cooklists():
         flash("Please log in to access this content", "danger")
         return redirect("/login")
 
-    # cooklists = g.user.cooklists
     cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
 
     return render_template('cooklists/cooklists.html', cooklists=cooklists)

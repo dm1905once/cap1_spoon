@@ -158,6 +158,16 @@ class IngredientList(db.Model):
     id   = db.Column(db.String(50), primary_key=True)
     name = db.Column(db.String(50), nullable=True)
 
+
+######### MEAL TYPES #########
+class MealTypes(db.Model):
+    '''List of meal types'''
+    __tablename__ = "meal_types"
+
+    id  = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    meal_type_name = db.Column(db.String(50), nullable=False)
+    meal_type_label = db.Column(db.String(50), nullable=False)
+
 #### App connect
 def connect_db(app):
     db.app = app
