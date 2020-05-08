@@ -68,7 +68,7 @@
                                             <div class="col-auto my-1">
                                                 <input type="hidden" value="{{favorite.id}}" name="add-recipe-id">
                                                 <select class="custom-select" name="add-cooklist-id">
-                                                    <option selected>Select available cooklist from this list:</option>
+                                                    <!-- <option selected>Select available cooklist from this list:</option> -->
                                                     {% for userlist in userlists %}
                                                         {% if userlist not in favorite.cooklists %}
                                                             <option value="{{userlist.id}}">{{userlist.list_name}}</option>
