@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 connect_db(app)
 SPOON_API_URL = "https://api.spoonacular.com"
 CURR_USER_KEY = "current_user"
-PAGINATION_PER_PAGE=3
+PAGINATION_PER_PAGE=12
 PAGINATION_SEARCH=False
 
 @app.before_request
@@ -130,27 +130,22 @@ def list_recipes():
     # Call findByIngredients  API to search by list of ingredients
     if "ingredients" in args:
         selected_ingredients='+'.join(args.getlist("ingredients"))
-        resp = requests.get(f"{SPOON_API_URL}/recipes/findByIngredients", params={"apiKey":{SPOON_API_KEY}, "ingredients":selected_ingredients, "ignorePantry":"true", "ranking":1, "number":12})
+        resp = requests.get(f"{SPOON_API_URL}/recipes/findByIngredients", params={"apiKey":{SPOON_API_KEY}, "ingredients":selected_ingredients, "ignorePantry":"true", "ranking":1})
         recipes_list = resp.json()
-        recipes=recipes_list[pagination_offset : pagination_offset+PAGINATION_PER_PAGE]
-
-        pagination = Pagination(page=page, per_page=PAGINATION_PER_PAGE, total=len(recipes_list), search=PAGINATION_SEARCH, record_name='recipes', display_msg='Displaying recipes <b>{start} - {end}</b> of a total of {total}', css_framework='bootstrap4', alignment='center')
-
-        if resp.status_code == 200:
-            return render_template('recipes/recipes.html', recipes=recipes, form=form, pagination=pagination)
-        else:
-            return redirect('/')
 
     # Call complexSearch API to search by mealtype
     if "meal_type" in args:
         meal_type=args.get("meal_type")
-        resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type,"number":12})
-        recipes = resp.json()
+        resp = requests.get(f"{SPOON_API_URL}/recipes/complexSearch", params={"apiKey":{SPOON_API_KEY}, "type":meal_type, "number":120})
+        recipes_json = resp.json()
+        recipes_list = recipes_json['results']
 
-        if resp.status_code == 200:
-            return render_template('recipes/recipes.html', recipes=recipes['results'], form=form)
-        else:
-            return redirect('/')
+    if recipes_list:
+        recipes = recipes_list[pagination_offset : pagination_offset+PAGINATION_PER_PAGE]
+        pagination = Pagination(page=page, per_page=PAGINATION_PER_PAGE, total=len(recipes_list), search=PAGINATION_SEARCH, record_name='recipes', display_msg='Displaying recipes <b>{start} - {end}</b> of a total of {total}', css_framework='bootstrap4', alignment='center')  
+        return render_template('recipes/recipes.html', recipes=recipes, form=form, pagination=pagination)
+    else:
+        return redirect('/')
 
 
 @app.route('/recipes/<int:recipe_id>', methods=["GET"])
