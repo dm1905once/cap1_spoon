@@ -324,3 +324,39 @@ def remove_recipe_from_cooklist():
     cooklists = Cooklist.query.filter(Cooklist.user_id == g.user.id).order_by(desc('created_date')).all()
 
     return render_template('cooklists/cooklists.html', cooklists=cooklists)
+
+
+@app.route('/user/cooklists/<int:cooklist_id>/generate_grocery', methods=["GET"])
+def generate_grocery_list(cooklist_id):
+    """Generate list of ingredients for all recipes in a cooklist"""
+
+    if not g.user:
+        flash("Please log in to access this content", "danger")
+        return redirect("/login")
+
+    user_cooklist_ids = [cooklist.id for cooklist in g.user.cooklists]
+
+    if cooklist_id not in user_cooklist_ids:
+        flash("You can only access your own cooklists", "danger")
+        return redirect("/user/cooklists")
+
+    measure_system  = g.user.preferences.measure_system
+    
+    cooklist_recipe_ids = db.session.query(CooklistRecipe.recipe_id).filter(CooklistRecipe.cooklist_id==cooklist_id)
+    # recipe_list = [recipe[0] for recipe in cooklist_recipe_ids]
+    # cooklist_recipe_idss = db.session.query(CooklistRecipe.recipe_id).filter(CooklistRecipe.cooklist_id==1).all()
+
+    # if measure_system == "metric":
+    # ingredients = db.session.query(Ingredient.aisle, Ingredient.name, Ingredient.metric_value, Ingredient.metric_unit).filter(cooklist_recipe_ids).all()
+    ingredients = Ingredient.query.filter(Ingredient.recipe_id.in_(cooklist_recipe_ids)).all()
+
+    return render_template('cooklists/grocery_list.html', ingredients=ingredients)
+        
+
+    # for name, unit, value in ingredientes: 
+    #     print(name, unit, value)
+    
+
+    
+
+    return redirect("/login")

@@ -33,7 +33,7 @@
                     <div class="card">
                         <h5 class="card-header">{{ cooklist.list_name }} 
                             {% if cooklist.recipes|length > 0 %}
-                                <a href="#" class="btn btn-primary float-right">Generate grocery list (TODO)</a>
+                                <a href="/user/cooklists/{{cooklist.id}}/generate_grocery" class="btn btn-success float-right">Generate grocery list</a>
                             {% endif %}
                         </h5>
                         <div class="card-body">

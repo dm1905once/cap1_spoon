@@ -1,0 +1,40 @@
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-8 offset-sm-2">
+            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Grocery list for ___</div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-sm-6 offset-sm-3">
+
+            <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">Aisle</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Unit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for ingredient in ingredients %}
+                    <tr>
+                        <th scope="row">{{ingredient.aisle}}</th>
+                        <td>{{ingredient.name}}</td>
+                        {% if g.user.measure_system == "metric"%}
+                            <td>{{ingredient.metric_value}}</td>
+                            <td>{{ingredient.metric_unit}}</td>
+                        {% else %}
+                            <td>{{ingredient.us_value}}</td>
+                            <td>{{ingredient.us_unit}}</td>
+                        {% endif %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+
+        </div>
+    </div>
+</div>
