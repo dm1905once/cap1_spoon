@@ -1,40 +1,62 @@
-<div class="container">
-    <div class="row my-3">
-        <div class="col-sm-8 offset-sm-2">
-            <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Grocery list for ___</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <title>Print Grocery List</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-sm-8 offset-sm-2">
+                <div class="h4 p-2 mb-2 border border-secondary rounded text-center">Print Grocery list: {{cooklist_info.list_name}}</div>
+            </div>
         </div>
-    </div>
 
-    <div class="row mt-4">
-        <div class="col-sm-6 offset-sm-3">
+        <div class="row mt-4">
+            <div class="col-sm-10 offset-sm-1">
 
-            <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th scope="col">Aisle</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Amount</th>
-                    <th scope="col">Unit</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for ingredient in ingredients %}
+                <table class="table table-sm">
+                    <thead>
                     <tr>
-                        <th scope="row">{{ingredient.aisle}}</th>
-                        <td>{{ingredient.name}}</td>
-                        {% if g.user.measure_system == "metric"%}
-                            <td>{{ingredient.metric_value}}</td>
-                            <td>{{ingredient.metric_unit}}</td>
-                        {% else %}
-                            <td>{{ingredient.us_value}}</td>
-                            <td>{{ingredient.us_unit}}</td>
-                        {% endif %}
+                        <th scope="col">Aisle</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Unit</th>
+                        <th scope="col">Got it</th>
                     </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                    {% for ingredient in ingredients %}
+                        <tr>
+                            <td>{{ingredient.aisle}}</td>
+                            <td>{{ingredient.name}}</td>
+                            {% if g.user.measure_system == "metric"%}
+                                <td>{{ingredient.metric_value}}</td>
+                                <td>{{ingredient.metric_unit}}</td>
+                            {% else %}
+                                <td>{{ingredient.us_value}}</td>
+                                <td>{{ingredient.us_unit}}</td>
+                            {% endif %}
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input position-static" type="checkbox">
+                                  </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
 
 
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-sm-4 offset-sm-8">
+                <a href="/user/cooklists" class="btn btn-outline-secondary">Back to Cooklists</a>
+            </div>
         </div>
     </div>
-</div>
+</body>
+</html>

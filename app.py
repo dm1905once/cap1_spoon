@@ -343,20 +343,9 @@ def generate_grocery_list(cooklist_id):
     measure_system  = g.user.preferences.measure_system
     
     cooklist_recipe_ids = db.session.query(CooklistRecipe.recipe_id).filter(CooklistRecipe.cooklist_id==cooklist_id)
-    # recipe_list = [recipe[0] for recipe in cooklist_recipe_ids]
-    # cooklist_recipe_idss = db.session.query(CooklistRecipe.recipe_id).filter(CooklistRecipe.cooklist_id==1).all()
+    ingredients = Ingredient.query.filter(Ingredient.recipe_id.in_(cooklist_recipe_ids)).order_by(Ingredient.aisle).all()
 
-    # if measure_system == "metric":
-    # ingredients = db.session.query(Ingredient.aisle, Ingredient.name, Ingredient.metric_value, Ingredient.metric_unit).filter(cooklist_recipe_ids).all()
-    ingredients = Ingredient.query.filter(Ingredient.recipe_id.in_(cooklist_recipe_ids)).all()
+    cooklist_info = Cooklist.query.get(cooklist_id)
 
-    return render_template('cooklists/grocery_list.html', ingredients=ingredients)
-        
-
-    # for name, unit, value in ingredientes: 
-    #     print(name, unit, value)
-    
-
-    
-
-    return redirect("/login")
+    return render_template('cooklists/grocery_list.html', ingredients=ingredients, cooklist_info=cooklist_info)
+  
