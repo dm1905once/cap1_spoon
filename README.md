@@ -30,5 +30,5 @@ In **Spoon** you can browse through thousands of recipes, pick your favorites an
 
 #### Recipe Data
 
-Recipe data (i.e. instructions, ingredients, pictures, etc.) made available by Spoonacular API <https://spoonacular.com/food-api>. If you want to clone or download, you can add the following free tier key, 5db04fdc8ba24bea9ad94eb4cdcb3646, to the privacy.py file (limited to less than 150 calls per day). 
+Recipe data (i.e. instructions, ingredients, pictures, etc.) made available by Spoonacular API <https://spoonacular.com/food-api>. If you want to clone or download and run locally, you can create an environment variable called SPOON_API_KEY_ENV and assignt it the value of a free tier key (eg.: 5db04fdc8ba24bea9ad94eb4cdcb3646, limited to less than 150 calls per day).
 

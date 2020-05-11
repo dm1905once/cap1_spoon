@@ -1,4 +1,3 @@
 venv/
 __pycache__
-#private.py
 templates/temp.html

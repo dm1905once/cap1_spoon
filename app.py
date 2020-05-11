@@ -3,20 +3,20 @@
 from flask import Flask, render_template, request, redirect, session, flash, g, jsonify
 from models import db, connect_db, User, Recipe, Cooklist, CooklistRecipe, Ingredient, UserRecipe, UserPreference, IngredientList, MealTypes
 from forms import SearchByMealTypeForm, SearchByIngredientsForm, UserRegisterForm, UserLoginForm, CooklistForm
-from private import SPOON_API_KEY
-import requests, json
+import requests, json, os
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import desc
 from datetime import datetime
 from flask_paginate import Pagination
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "asdfasdflkgflkgf"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///spoon'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'asdfasdflkgflkgf')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql:///spoon')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 connect_db(app)
 SPOON_API_URL = "https://api.spoonacular.com"
+SPOON_API_KEY = os.environ.get('SPOON_API_KEY_ENV', 'enter_api_key_here')
 CURR_USER_KEY = "current_user"
 PAGINATION_PER_PAGE=12
 PAGINATION_SEARCH=False
