@@ -30,5 +30,17 @@ In **Spoon** you can browse through thousands of recipes, pick your favorites an
 
 #### Recipe Data
 
-Recipe data (i.e. instructions, ingredients, pictures, etc.) made available by Spoonacular API <https://spoonacular.com/food-api>. If you want to clone or download and run locally, you can create an environment variable called SPOON_API_KEY_ENV and assignt it the value of a free tier key (eg.: 5db04fdc8ba24bea9ad94eb4cdcb3646, limited to less than 150 calls per day).
+Recipe data (i.e. instructions, ingredients, pictures, etc.) made available by Spoonacular API <https://spoonacular.com/food-api>. 
 
+
+
+#### How to run
+
+0. You must have Python 3 installed and Postgres RDBMS
+1. Clone or download from Github
+2. Install the required libraries from the requirements.txt file: `pip3 install -r requirements.txt` 
+3. Create a local postgres database named 'spoon': `psql; create database spoon; \q`
+4. Run the 'seed_initialize_tables.py': `python seed_initialize_tables.py`
+5. Create an environment variable with the API KEY: `export SPOON_API_KEY_ENV=key_goes_here`
+5.1 Replace 'key_goes_here' with your own API KEY (more info here: <https://spoonacular.com/food-api/pricing>
+5.2 Alternatively you can use db04fdc8ba24bea9ad94eb4cdcb3646 (limited to less than 150 calls per day).
